@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
-
 #define tokluk 0
 #define uyku 1
 #define sosyallesme 2
@@ -13,36 +12,26 @@
 #define eglence 7
 #define yalnizlik 8
 #define sinirlilik 9
-#define sevgi 10
-#define su_durumu 11
-#define karakter_durum_sayisi 12
+#define karakter_durum_sayisi 10
 
-void karakter_durum_duzenle(int* karakter_durum_data, int duzenlenecek_id);
-void karakter_durum_data_sifirla(int* data_dizisi); // dum durumlara 5 atanir
+void karakter_durum_data_sifirla(char* data_dizisi); // dum durumlara 5 atanir
 void grafik_yazdir(char isaret, int adet);  // verilen isaret ve adete gore grafik yazdirir
-void karakter_durum_yazdir(int durum_id, int* karakter_durum_data, char** karakter_durum_isimleri); // durum idsine gore grafiklestirerek yazdirir -1 değeri tüm durumlari yazdirir
-void karakter_durum_tumunden_bir_eksilt(int* karakter_durum_data); // tum durumlardan 1 eksiltir
-int karakter_yasiyor_mu(int* karakter_durum_data); // yasiyorsa 1 yasamiyorsa 0
-void duruma_gore_yazi_yazdir(int* karakter_durum_data);
-void UykuAzalt(int* karakter_durum_data);
-void SosyallikArttir(int* karakter_durum_data);
-void SaglikArttir(int* karakter_durum_data);
-void HijyenArttir(int* karakter_durum_data);
-void TuvaletYap(int* karakter_durum_data);
-void EglenceArttir(int* karakter_durum_data);
-void YalnizlikAzalt(int* karakter_durum_data);
-void SinirlilikAzalt(int* karakter_durum_data);
-void SevgiArttir(int* karakter_durum_data);
-void SuIc(int* karakter_durum_data);
+void karakter_durum_yazdir(int durum_id, char* karakter_durum_data, char* karakter_durum_isimleri); // durum idsine gore grafiklestirerek yazdirir -1 değeri tüm durumlari yazdirir
+void karakter_durum_tumunden_bir_eksilt(char* karakter_durum_data); // tum durumlardan 1 eksiltir
+void karakter_durumlarin_diger_durumlardan_etkilenmesi(); // ?
+int karakter_yasiyor_mu(); // yasiyorsa 1 yasamiyorsa 0
 void oyunBaslat();
 
 int main(){
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    int karakter_durum_data[karakter_durum_sayisi];
+    char karakter_durum_isimleri[karakter_durum_sayisi][15] = {"Tokluk","Uyku","Sosyallesme","Saglik","Egitim","Hijyen","Tuvalet","Eglence","Yalnizlik"};
     int secim = -1;
     
     ////////////////////////////////////////////////////////////////////////////////////////////////
 do{
+    system("cls");
     do
     {
         printf(
@@ -65,7 +54,7 @@ do{
     case 2:
         printf(
             "Yaptigin Secimlere Gore Karakterini Hayatta Tutmaya Calis!\n"
-            "Eger Karakterin Hayati Degerleri 0 ve altina duserse karakterin olur! (belkide sen olursun...))\n\n"
+            "Eger Karakterin Hayati Degerleri 0 ve altina duserse kaybedersin!\n\n"
             "\t<<< Hayati Durumlar >>>\n\n"
             "1- Saglik\t"
             "2- Uyku\t\t"
@@ -94,7 +83,7 @@ do{
             {
             case 1:
                 printf(
-                    "Taiga pork cutlet yemeden duramiyor \n"
+                    "Her uc gunde bir 'pork cutlet' yemez ise yemedigi her bir gun icin mutluluk 1 azalir ve sinirlilik 1 artar.\n"
                     "\n\nonceki menuye donmek icin 'enter'a bas >> "
                 );
                 getc(stdin);
@@ -138,17 +127,9 @@ do{
 
 }
 void oyunBaslat(){
-    int karakter_durum_data[karakter_durum_sayisi];
-    karakter_durum_data_sifirla(karakter_durum_data);
-    char karakter_durum_isimleri[][15] = {"Tokluk","Uyku","Sosyallesme","Saglik","Egitim","Hijyen","Tuvalet","Eglence","Yalnizlik","Sinirlilik","Sevgi","Su"};
-    do
-    {
-        duruma_gore_yazi_yazdir(karakter_durum_data);
-        karakter_durum_yazdir(-1,karakter_durum_data,karakter_durum_isimleri);
-    } while (1);
-    
+
 }
-void karakter_durum_data_sifirla(int* karakter_durum_data){ // default deger = 5 olarak ata
+void karakter_durum_data_sifirla(char* karakter_durum_data){ // default deger = 5 olarak ata
     for (int i = 0; i < karakter_durum_sayisi; i++) karakter_durum_data[i] = 5;
     
 }
@@ -167,7 +148,7 @@ void grafik_yazdir(char isaret, int adet){
     printf("\n");
     
 }
-void karakter_durum_yazdir(int durum_id, int* karakter_durum_data, char** karakter_durum_isimleri) // -1 ise hepsini yazdir yoksa id'sine gore yazdir
+void karakter_durum_yazdir(int durum_id, char* karakter_durum_data, char* karakter_durum_isimleri) // -1 ise hepsini yazdir yoksa id'sine gore yazdir
 {
 
     switch (durum_id)
@@ -209,7 +190,7 @@ void karakter_durum_yazdir(int durum_id, int* karakter_durum_data, char** karakt
         for(int i = 0; i < karakter_durum_sayisi;i++ ) printf("%13s --> ",karakter_durum_isimleri[i]) ,grafik_yazdir('#',karakter_durum_data[i]); // tum karakter durumlarini yazdir
     }
 }
-void karakter_durum_tumunden_bir_eksilt(int* karakter_durum_data){ // saglik haric
+void karakter_durum_tumunden_bir_eksilt(char* karakter_durum_data){ // saglik haric
 
     for (int i = 0; i < karakter_durum_sayisi; i++)
     {
@@ -220,78 +201,10 @@ void karakter_durum_tumunden_bir_eksilt(int* karakter_durum_data){ // saglik har
     
 
 }
-int karakter_yasiyor_mu(int* karakter_durum_data){ // karakter yasiyorsa 1 yasamiyorsa 0 dondur
+int karakter_yasiyor_mu(char* karakter_durum_data){ // karakter yasiyorsa 1 yasamiyorsa 0 dondur
 
     if(karakter_durum_data[0] <= 0 || karakter_durum_data[1] <= 0 || karakter_durum_data[3] <= 0) // 0 tokluk // 1 uyku // 3 saglik
         return 0;
     else return 1;
 
-}
-void duruma_gore_yazi_yazdir(int* karakter_durum_data){
-    if(karakter_durum_data[saglik] < 3){
-        printf("Taiga Aisaka bitkin bir sekilde sana bakiyor");
-    }
-    else if(karakter_durum_data[su_durumu] < 4){
-        printf("Taiga Aisaka susuzluktan kivraniyor!");
-    }
-    else if(karakter_durum_data[tokluk] < 4){
-        if(karakter_durum_data[sinirlilik] > 7)
-            printf("Taiga cok sinirli gozukuyor belki 'Pork Cutlet' yedirirsen mutlu olabilir");
-        else
-            printf("(Mide Gurultusu)");
-    }
-    else if(karakter_durum_data[uyku] < 3){
-        printf("Taigayi uyutsan iyi olucak gibi!");
-    }
-    else if(karakter_durum_data[sinirlilik]){
-        printf("Sana oyle bir sinirle bakiyor ki...");
-
-    }
-    else if(karakter_durum_data[saglik] > 5 && karakter_durum_data[su_durumu] > 6 && karakter_durum_data[tokluk] > 6 && karakter_durum_data[sevgi] > 7){
-
-        printf("Taiga ansizin sana sariliyor ve sende dayanamayip sende sariliyorsun");
-
-    }
-}
-void toklukArttir(int* karakter_durum_data){
-    
-}
-void UykuAzalt(int* karakter_durum_data){
-    karakter_durum_data[uyku] += -3;
-}
-void SosyallikArttir(int* karakter_durum_data){
-    karakter_durum_data[sosyallesme] += 3;
-    
-}
-void SaglikArttir(int* karakter_durum_data){
-    karakter_durum_data[saglik] += 3;
-    
-}
-void HijyenArttir(int* karakter_durum_data){
-    karakter_durum_data[hijyen] += 3;
-    
-}
-void TuvaletYap(int* karakter_durum_data){
-    karakter_durum_data[tuvalet] += -3;
-    
-}
-void EglenceArttir(int* karakter_durum_data){
-    karakter_durum_data[eglence] += 3;
-    
-}
-void YalnizlikAzalt(int* karakter_durum_data){
-    karakter_durum_data[yalnizlik] += -3;
-    
-}
-void SinirlilikAzalt(int* karakter_durum_data){
-    karakter_durum_data[sinirlilik] += -3;
-    
-}
-void SevgiArttir(int* karakter_durum_data){
-    karakter_durum_data[sevgi] += 3;
-    
-}
-void SuIc(int* karakter_durum_data){
-    karakter_durum_data[su_durumu] += 3;
-    
 }
