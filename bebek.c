@@ -106,7 +106,7 @@ do{
             case 1:
                 printf(
                     "Taiga 'Pork Cutlet' yemeden duramiyor! \n"
-                    "Her 4 aksiyonda bir 'Pork Cutlet' yemez ise 4 eylemin ardindan\nyemedigi her bir eylem icin sevgi 1 azalir ve sinirlilik 1 artar.\n"
+                    "Her 5 eylemde bir 'Pork Cutlet' yemez ise 6 eylemin ardindan\nyemedigi her bir eylem icin sevgi 1 azalir ve sinirlilik 1 artar.\n"
                     "\n\nonceki menuye donmek icin 'enter'a bas >> "
                 );
                 getc(stdin);
@@ -114,7 +114,7 @@ do{
                 break;
             case 2:
                 printf(
-                    "Taiga kucuklugunden beri RPG oyunlarina bagimli onla oynamazsan cok uzulur!\nEger uc eylemde bir 'RPG' oynamazsan uc eylemin ardindan oynamadigi her bir eylem icin sinirlilik 1 artar ve sevgi 1 azalir."
+                    "Taiga kucuklugunden beri RPG oyunlarina bagimli onla oynamazsan cok uzulur!\nEger 4 eylemde bir 'RPG' oynamazsan 4 eylemin ardindan oynamadigi her bir eylem icin sinirlilik 1 artar ve sevgi 1 azalir."
                     "\n\n\nonceki menuye donmek icin 'enter'a bas >> "
                 );
                 getc(stdin);
@@ -150,7 +150,6 @@ void oyunBaslat(){
     int karakter_durum_data[karakter_durum_sayisi];
     int rpg_sayac = 0;
     int pork_cutlet_sayac = 0;
-
     karakter_durum_data_sifirla(karakter_durum_data); // varsayilan olarak tum durumlara 5 atanir
     char girdi;
     do
@@ -160,7 +159,6 @@ void oyunBaslat(){
         karakter_durum_yazdir(-1,karakter_durum_data,rpg_sayac,pork_cutlet_sayac); // grafik_Cizme fonksiyonunu kullanarak ekrana durumlarin grafigini ciziyor -1 degeri tum durumlari yazacagini belirtiyor
         duruma_gore_yazi_yazdir(karakter_durum_data);
         printf("\n");
-
         printf(
             "1- Temel Ihtiyaclar\n"
             "2- Eglence Vb.\n"
@@ -213,6 +211,9 @@ void oyunBaslat(){
                                 "| Pork Cutlet +3 Tokluk +2 Sevgi -2 Sinirlilik |\n" 
                                 "|                                              |\n" 
                                 "| Elma +1 Tokluk +2 Bagisiklik                 |\n" 
+                                "|                                              |\n" 
+                                "| Portakal +1 tokluk +3 Bagisiklik             |\n" 
+                                "|                                              |\n" 
                                 "|----------------------------------------------|\n"
                                 "\nYemek istediginiz yiyecegi 'adet isim' olarak yaziniz\n\ngeri donmek icin * tusuna basin\n\n"
                                 "\n>>>>>> "
@@ -229,6 +230,7 @@ void oyunBaslat(){
                                 rpg_sayac++;
                                 toklukFunction(karakter_durum_data,3,text_adet);
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,sevgi,saglik);
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                             }
                             else if(!strcmp(text_isim,"sata andagi")){
                                 pork_cutlet_sayac++;
@@ -236,6 +238,7 @@ void oyunBaslat(){
                                 animasyonlu_yazi("Sata Andagi Yeniyor");
                                 toklukFunction(karakter_durum_data,2,text_adet); 
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,sevgi,saglik);
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                             }
                             else if(!strcmp(text_isim,"onigiri")){
                                 pork_cutlet_sayac++;
@@ -243,6 +246,7 @@ void oyunBaslat(){
                                 animasyonlu_yazi("Onigiri Yeniyor");
                                 toklukFunction(karakter_durum_data,1,text_adet);
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,tokluk,saglik);
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                             }
                             else if(!strcmp(text_isim,"sukiyaki")){
                                 animasyonlu_yazi("Sukiyaki Yeniyor");
@@ -251,6 +255,7 @@ void oyunBaslat(){
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,4,tokluk,sevgi,saglik,tuvalet);
                                 pork_cutlet_sayac++;
                                 rpg_sayac++;
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                             }
                             else if(!strcmp(text_isim,"pork cutlet")){
                                 animasyonlu_yazi("Pork Cutlet Yeniyor");
@@ -260,14 +265,25 @@ void oyunBaslat(){
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,sevgi,saglik,sinirlilik);
                                 rpg_sayac++;
                                 pork_cutlet_sayac = 0;
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                             }
                             else if(!strcmp(text_isim,"elma")){
                                 animasyonlu_yazi("Elma Yeniyor");
                                 toklukFunction(karakter_durum_data,1,text_adet);
-                                BagisiklikFunction(karakter_durum_data,2,1);
+                                BagisiklikFunction(karakter_durum_data,2,text_adet);
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,saglik,bagisiklik);
                                 rpg_sayac++;
                                 pork_cutlet_sayac++;
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+                            }
+                            else if(!strcmp(text_isim,"portakal")){
+                                animasyonlu_yazi("Portakal Yeniyor");
+                                toklukFunction(karakter_durum_data,1,text_adet);
+                                BagisiklikFunction(karakter_durum_data,3,text_adet);
+                                karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,saglik,bagisiklik);
+                                rpg_sayac++;    
+                                pork_cutlet_sayac++;
+                                karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                             }
                             else{
                                 printf("Yanlis Girdi Tekrar Deneyin\n");
@@ -286,7 +302,7 @@ void oyunBaslat(){
                             "|  Su -> +3 Su +1 Tuvalet                       |\n" // +3 su 
                             "|  Kola -> +1 su -1 Bagisiklik -1 Uyku +1 Sevgi |\n" // +1 su -1 bagisiklik -1 can -1 uyku
                             "|  Kahve -> -2 uyku +1 su                       |\n" // -2 uyku +1 su
-                            "|  Cay -> +1 su                                 |\n" // +1 su 
+                            "|  Cay -> +1 su  -2 sinirlilik                  |\n" // +1 su 
                             "|  Meyve Suyu -> +1 su +2 bagisiklik            |\n" // +1 su 
                             "|-----------------------------------------------|\n"
                             "\nYemek istediginiz yiyecegi 'adet isim' olarak yaziniz\n\ngeri donmek icin * tusuna basin\n\n"
@@ -306,6 +322,8 @@ void oyunBaslat(){
                             karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,su_durumu,saglik);
                             pork_cutlet_sayac++;
                             rpg_sayac++;
+                            karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+                            
                         }
                         else if(!strcmp(text_isim,"kola")){
                             SuFunction(karakter_durum_data,1,text_adet);
@@ -316,6 +334,7 @@ void oyunBaslat(){
                             karakter_durumlarindan_bir_eksilt(karakter_durum_data,4,su_durumu,bagisiklik,saglik,uyku);
                             pork_cutlet_sayac++;
                             rpg_sayac++;
+                            karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                         }
                         else if(!strcmp(text_isim,"kahve")){
                             SuFunction(karakter_durum_data,1,text_adet);
@@ -324,13 +343,16 @@ void oyunBaslat(){
                             karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,su_durumu,uyku,saglik);
                             pork_cutlet_sayac++;
                             rpg_sayac++;
+                            karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                         }
                         else if(!strcmp(text_isim,"cay")){
                             SuFunction(karakter_durum_data,1,text_adet);
                             animasyonlu_yazi("Cay Iciliyor");
+                            BagisiklikFunction(karakter_durum_data,-2,text_adet);
                             karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,su_durumu,saglik);
                             pork_cutlet_sayac++;
                             rpg_sayac++;
+                            karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                         }
                         else if(!strcmp(text_isim,"meyve suyu")){
                             SuFunction(karakter_durum_data,1,text_adet);
@@ -339,6 +361,7 @@ void oyunBaslat(){
                             karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,su_durumu,saglik,bagisiklik);
                             pork_cutlet_sayac++;
                             rpg_sayac++;
+                            karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                         }
                         else{
                             printf("Yanlis Girdi Tekrar Deneyin");
@@ -348,52 +371,52 @@ void oyunBaslat(){
                         } while (1);
                         break;
                     case 3:
-                        if(karakter_durum_data[uyku] < 7) system("cls"), printf("\n\n\n\t\tTaiga Uyumak Istemiyor!"), Sleep(2000);
-                        else{
-                            do{
-                                system("cls");
-                                karakter_durum_yazdir(-1, karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
-                                printf(
-                                    "\n\n"
-                                    "|-------------------------------------|\n"
-                                    "|                                     |\n" 
-                                    "| 1 - Kanepede Biraz Uzan (-3 Uyku)   |\n"
-                                    "|                                     |\n" 
-                                    "| 2 - Sabaha Kadar Uyu  (-9 Uyku)     |\n"
-                                    "|                                     |\n" 
-                                    "|-------------------------------------|\n"
-                                    "\n  3 - Geri don\n"
-                                    "\n"
-                                    "\n>>>>>> "
-                                    );
-                                fflush(stdin); // gets scanf enter sorunu icin input sifirlama
-                                girdi = getchar();
-                                girdi -= '0';
-                                if(girdi == 3) break;
-                                else
+                        do{
+                            system("cls");
+                            karakter_durum_yazdir(-1, karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+                            printf(
+                                "\n\n"
+                                "|---------------------------------------------------|\n"
+                                "|                                                   |\n" 
+                                "| 1 - Kanepede Biraz Uzan (-3 Uyku -1 sinirlilik)   |\n"
+                                "|                                                   |\n" 
+                                "| 2 - Sabaha Kadar Uyu  (-9 Uyku -3 sinirlilik)     |\n"
+                                "|                                                   |\n" 
+                                "|---------------------------------------------------|\n"
+                                "\n  3 - Geri don\n"
+                                "\n"
+                                "\n>>>>>> "
+                                );
+                            fflush(stdin); // gets scanf enter sorunu icin input sifirlama
+                            girdi = getchar();
+                            girdi -= '0';
+                            if(girdi == 3) break;
+                            else
+                            {
+                                switch (girdi)
                                 {
-                                    switch (girdi)
-                                    {
-                                    case 1:
-                                        UykuFunction(karakter_durum_data,-1,3);
-                                        animasyonlu_yazi("Kanapede Uzaniliyor");
-                                        karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,uyku,saglik);
-                                        pork_cutlet_sayac++;
-                                        rpg_sayac++;
-                                        break;
-                                    case 2:
-                                        UykuFunction(karakter_durum_data,-3,3);
-                                        animasyonlu_yazi("Uyunuluyor");
-                                        karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,uyku,saglik);
-                                        pork_cutlet_sayac++;
-                                        rpg_sayac++;
-                                        break;
-                                    }
+                                case 1:
+                                    UykuFunction(karakter_durum_data,-1,3);
+                                    SinirlilikFunction(karakter_durum_data,-1,1);
+                                    animasyonlu_yazi("Kanapede Uzaniliyor");
+                                    karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,uyku,saglik,sinirlilik);
                                     karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+                                    pork_cutlet_sayac++;
+                                    rpg_sayac++;
+                                    break;
+                                case 2:
+                                    UykuFunction(karakter_durum_data,-3,3);
+                                    SinirlilikFunction(karakter_durum_data,-3,1);
+                                    animasyonlu_yazi("Uyunuluyor");
+                                    karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,uyku,saglik);
+                                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+                                    pork_cutlet_sayac++;
+                                    rpg_sayac++;
+                                    break;
                                 }
-                                
-                            }while (1);
-                        }
+                            }
+                            
+                        }while (1);
                     case 4:
                         break;
                     default:
@@ -414,16 +437,18 @@ void oyunBaslat(){
                     "|                                                                                     |\n" 
                     "|   Taiga ile...                                                                      |\n" 
                     "|                                                                                     |\n" 
-                    "| 1 - RPG oyna  (+1 Sosyallik +3 eglence +1 sevgi -2 sinirlilik)                      |\n"
+                    "| 1 - RPG oyna  (+2 Sosyallik +3 eglence +1 sevgi -3 sinirlilik)                      |\n"
                     "|                                                                                     |\n" 
-                    "| 2 - Disarda vakit gecir  (+3 sosyallik  +2 uyku +2 eglence +1 sevgi -1 sinirlilik)  |\n"
+                    "| 2 - Disarda vakit gecir  (+3 sosyallik  +2 uyku +2 eglence +1 sevgi -2 sinirlilik)  |\n"
                     "|                                                                                     |\n" 
                     "| 3 - Ders Calis (+3 Egitim +2 sinirlilik +2 uyku)                                    |\n" 
                     "|                                                                                     |\n" 
-                    "| 4 - Kitap oku (+2 sosyallik +1 egitim)                                              |\n" 
+                    "| 4 - Kitap oku (+2 sosyallik +2 egitim)                                              |\n" 
+                    "|                                                                                     |\n" 
+                    "| 5 - Okula Git (+3 sosyallik +4 egitim -3 sinirlilik +3 uyku +2 eglence)             |\n" 
                     "|                                                                                     |\n" 
                     "|-------------------------------------------------------------------------------------|\n"
-                    "\n  5 - Geri don\n"
+                    "\n  6 - Geri don\n"
                     "\n>>>>>> "
                     );
                 fflush(stdin); // gets scanf enter sorunu icin input sifirlama
@@ -433,12 +458,14 @@ void oyunBaslat(){
                 {
                 case 1:
                     karakter_durumlarindan_bir_eksilt(karakter_durum_data,5,sosyallesme,eglence,sevgi,saglik,sinirlilik);
-                    SosyallikFunction(karakter_durum_data,1,1);
+                    SosyallikFunction(karakter_durum_data,2,1);
                     EglenceFunction(karakter_durum_data,3,1);
                     SevgiFunction(karakter_durum_data,1,1);
-                    SinirlilikFunction(karakter_durum_data,-2,1);
+                    SinirlilikFunction(karakter_durum_data,-3,1);
                     animasyonlu_yazi("Taiga ile RPG oynaniyor");
+                    pork_cutlet_sayac++;
                     rpg_sayac = 0;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 2:
                     SosyallikFunction(karakter_durum_data,3,1);
@@ -450,6 +477,7 @@ void oyunBaslat(){
                     animasyonlu_yazi("Taiga ile vakit geciriliyor");
                     pork_cutlet_sayac++;
                     rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 3:
                     animasyonlu_yazi("Taiga ile ders calisiliyor");
@@ -459,17 +487,31 @@ void oyunBaslat(){
                     karakter_durumlarindan_bir_eksilt(karakter_durum_data,4,eglence,sinirlilik,saglik,uyku);
                     pork_cutlet_sayac++;
                     rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 4:
                     animasyonlu_yazi("Taiga ile kitap okunuyor");
                     SosyallikFunction(karakter_durum_data,2,1);
-                    EgitimFunction(karakter_durum_data,1,1);
+                    EgitimFunction(karakter_durum_data,2,1);
                     karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,sosyallesme,egitim,saglik);
                     pork_cutlet_sayac++;
                     rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+                    break;
+                case 5:
+                    animasyonlu_yazi("Taiga'yi Okula Gidiyor");
+                    SosyallikFunction(karakter_durum_data,3,1);
+                    EgitimFunction(karakter_durum_data,4,1);
+                    SinirlilikFunction(karakter_durum_data,-3,1);
+                    UykuFunction(karakter_durum_data,3,1);
+                    EglenceFunction(karakter_durum_data,2,1);
+                    karakter_durumlarindan_bir_eksilt(karakter_durum_data,6,sosyallesme,egitim,saglik,sinirlilik,uyku,eglence);
+                    pork_cutlet_sayac++;
+                    rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 }
-                if(girdi == 5) break;
+                if(girdi == 6) break;
             }while (1);
             break;
         case 3:
@@ -480,15 +522,15 @@ void oyunBaslat(){
                     "\n\n"
                     "|-------------------------------------------------------------|\n"
                     "|                                                             |\n" 
-                    "| 1 - Taiga Banyo Yapsin (+3 Hijyen +1 Saglik)                |\n"
+                    "| 1 - Taiga Banyo Yapsin (+5 Hijyen +2 Saglik)                |\n"
                     "|                                                             |\n" 
-                    "| 2 - Taigaya Saril  (+2 Sevgi -2 Sinirlilik +1 Sosyallesme)  |\n"
+                    "| 2 - Taigaya Saril  (+3 Sevgi -3 Sinirlilik +2 Sosyallesme)  |\n"
                     "|                                                             |\n" 
-                    "| 3 - Taiganin Sacini Tara (+2 Hijyen +1 Sevgi -1 Sinirlilik) |\n" 
+                    "| 3 - Taiganin Sacini Tara (+3 Hijyen +2 Sevgi -2 Sinirlilik) |\n" 
                     "|                                                             |\n" 
-                    "| 4 - Taiga Tuvaletini Yapsin (-6 Tuvalet -2 Hijyen)          |\n" 
+                    "| 4 - Taiga Tuvaletini Yapsin (-7 Tuvalet -2 Hijyen)          |\n" 
                     "|                                                             |\n" 
-                    "| 5 - Taiganin Ellerini Yika (+2 Hijyen +1 Saglik)            |\n" 
+                    "| 5 - Taiganin Ellerini Yika (+3 Hijyen +1 Saglik)            |\n" 
                     "|                                                             |\n" 
                     "|-------------------------------------------------------------|\n"
                     "\n  6 - Geri don\n"
@@ -502,38 +544,51 @@ void oyunBaslat(){
                 {
                 case 1:
                     animasyonlu_yazi("Taiga Banyo Yapiyor");
-                    SaglikFunction(karakter_durum_data,1,1);
-                    HijyenFunction(karakter_durum_data,3,1);
+                    SaglikFunction(karakter_durum_data,2,1);
+                    HijyenFunction(karakter_durum_data,5,1);
                     karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,saglik,hijyen);
+                    pork_cutlet_sayac++;
+                    rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 2:
-                    SevgiFunction(karakter_durum_data,2,1);
-                    SinirlilikFunction(karakter_durum_data,-2,1);
-                    SosyallikFunction(karakter_durum_data,1,1);
+                    SevgiFunction(karakter_durum_data,3,1);
+                    SinirlilikFunction(karakter_durum_data,-3,1);
+                    SosyallikFunction(karakter_durum_data,2,1);
                     animasyonlu_yazi("Taigaya Sariliniyor");
+                    pork_cutlet_sayac++;
+                    rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 3:
-                    HijyenFunction(karakter_durum_data,2,1);
-                    SevgiFunction(karakter_durum_data,1,1);
-                    SinirlilikFunction(karakter_durum_data,-1,1);
-                    animasyonlu_yazi("Taiganin Sacin Taraniyor");
+                    HijyenFunction(karakter_durum_data,3,1);
+                    SevgiFunction(karakter_durum_data,2,1);
+                    SinirlilikFunction(karakter_durum_data,-2,1);
+                    animasyonlu_yazi("Taiganin Saci Taraniyor");
                     karakter_durumlarindan_bir_eksilt(karakter_durum_data,4,hijyen,sinirlilik,saglik,sevgi);
+                    pork_cutlet_sayac++;
+                    rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 4:
                     animasyonlu_yazi("Taiga Tuvaletini Yapiyor");
-                    TuvaletFunction(karakter_durum_data,-6,1);
+                    TuvaletFunction(karakter_durum_data,-7,1);
                     HijyenFunction(karakter_durum_data,-2,1);
                     karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,hijyen,tuvalet,saglik);
+                    pork_cutlet_sayac++;
+                    rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 case 5:
-                    animasyonlu_yazi("Taiganin Ellerini Yika");
-                    HijyenFunction(karakter_durum_data,2,1);
+                    animasyonlu_yazi("Taiganin Elleri Yikaniyor");
+                    HijyenFunction(karakter_durum_data,3,1);
                     SaglikFunction(karakter_durum_data,1,1);
-                    karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,saglik,hijyen,saglik);
+                    karakter_durumlarindan_bir_eksilt(karakter_durum_data,2,saglik,hijyen);
+                    pork_cutlet_sayac++;
+                    rpg_sayac++;
+                    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
                     break;
                 }
-                pork_cutlet_sayac++;
-                rpg_sayac++;
             }while (1);
             break;
         case 4:
@@ -583,11 +638,16 @@ void karakter_durum_yazdir(int durum_id, int* karakter_durum_data,int rpg_sayac,
     }
     for (int i = 0; i < karakter_durum_sayisi; i++)
     {
-        if(i == saglik || i == tokluk || i == uyku || i == su_durumu || i == sinirlilik) continue; // bu durumlar haric cunku olme durumu bunlarin 10 ve 0 alti oldugu durumlarda gecerli 
-        if(karakter_durum_data[i] > 10) karakter_durum_data[i] = 10; // durumlar 10 ustune cikamasin
-        else if(karakter_durum_data[i] < 0) karakter_durum_data[i] = 0; // durumlar 0 altina inmesin
+        if(i == tokluk || i == uyku || i == sinirlilik || i == tuvalet) continue; // bu durumlar haric cunku olme durumu bunlarin 10 ve 0 alti oldugu durumlarda gecerli 
+        if(karakter_durum_data[i] > 10) karakter_durum_data[i] = 10;
+
     }
-    karakter_ozellikleri_kontrol(karakter_durum_data,rpg_sayac,pork_cutlet_sayac);
+    for (int i = 0; i < karakter_durum_sayisi; i++)
+    {
+        if(i == saglik || i == tokluk || i == su_durumu ||i == su_durumu) continue; // bu durumlar haric cunku olme durumu bunlarin 10 ve 0 alti oldugu durumlarda gecerli 
+        if(karakter_durum_data[i] < 0) karakter_durum_data[i] = 0;
+
+    }
     if(!karakter_yasiyor_mu(karakter_durum_data)) karakter_olum_ekrani(karakter_durum_data); // Ekrana yazdirmadan once karakter yasiyor mu kontrol
     switch (durum_id)
     {
@@ -641,8 +701,8 @@ void karakter_durum_yazdir(int durum_id, int* karakter_durum_data,int rpg_sayac,
         if(karakter_durum_data[su_durumu] < 4) printf("- Su -");
         printf("\n\n----------------------------------------------------\n");
     }
-    printf("\n  Taiga %d/4 Eylemdir Pork Cutlet Yemiyor!\n",pork_cutlet_sayac);
-    printf("  Taiga %d/3 Eylemdir RPG Oynamiyor!",rpg_sayac);
+    printf("\n  Taiga %d/6 Eylemdir Pork Cutlet Yemiyor!\n",pork_cutlet_sayac);
+    printf("  Taiga %d/4 Eylemdir RPG Oynamiyor!",rpg_sayac);
     printf("\n\n----------------------------------------------------");
 }
 void karakter_durumlarindan_bir_eksilt(int* karakter_durum_data,int n,...){ // n adet veriyi es gec ve diger durumlardan 1 eksilt
@@ -669,7 +729,7 @@ void karakter_durumlarindan_bir_eksilt(int* karakter_durum_data,int n,...){ // n
         }
         karakter_durum_data[azaltilacaklar[i]]--;
     }
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
     {
         for(int j = 0; j < n ; j++){
             if(es_gecilecekler[j] == artirilacaklar[i]){
@@ -685,7 +745,7 @@ void karakter_durumlarindan_bir_eksilt(int* karakter_durum_data,int n,...){ // n
     }
 }
 int karakter_yasiyor_mu(int* karakter_durum_data){ // karakter yasiyorsa 1 yasamiyorsa 0 dondur
-    if(karakter_durum_data[tokluk] <= 0 || karakter_durum_data[uyku] > 10 || karakter_durum_data[saglik] <= 0 || karakter_durum_data[tokluk] > 10 || karakter_durum_data[sinirlilik] >= 10) // 0 tokluk // 1 uyku // 3 saglik
+    if(karakter_durum_data[tokluk] <= 0 || karakter_durum_data[uyku] > 10 || karakter_durum_data[saglik] <= 0 || karakter_durum_data[tokluk] > 10 || karakter_durum_data[sinirlilik] >= 10 || karakter_durum_data[su_durumu] < 0) // 0 tokluk // 1 uyku // 3 saglik
         return 0;
     else return 1;
 }
@@ -853,7 +913,7 @@ void karakter_olum_ekrani(int* karakter_durum_data){ // karakterin olme sebebine
         "\t\tTaiganin sagligi 0 oldugu icin oldu!"
         );
     }
-    else if(karakter_durum_data[su_durumu] <= 0){
+    else if(karakter_durum_data[su_durumu] < 0){
         printf(
         "\n\n\n"
         "\t\tTaiga susuzluktan oldu!"
@@ -862,7 +922,7 @@ void karakter_olum_ekrani(int* karakter_durum_data){ // karakterin olme sebebine
     else if(karakter_durum_data[sinirlilik] >= 10){
         printf(
         "\n\n\n"
-        "\t\tTaiga sinirlenip tahta kiliciyla seni doverek evden kovdu (sinirlilik >= 10)\n"
+        "\t\tTaiga sinirlenip tahta kiliciyla seni doverek evden kovdu\n"
         );
     }
     Sleep(3000);
@@ -873,12 +933,12 @@ void karakter_olum_ekrani(int* karakter_durum_data){ // karakterin olme sebebine
 
 }
 void karakter_ozellikleri_kontrol(int *karakter_durum_data,int rpg_sayac, int pork_cutlet_sayac){
-    if (rpg_sayac >= 3)
+    if (rpg_sayac >= 4)
     {
         SinirlilikFunction(karakter_durum_data,1,1);
         SevgiFunction(karakter_durum_data,-1,1);
     }
-    if (pork_cutlet_sayac >= 4)
+    if (pork_cutlet_sayac >= 6)
     {
         SinirlilikFunction(karakter_durum_data,1,1);
         SevgiFunction(karakter_durum_data,-1,1);
