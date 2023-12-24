@@ -106,7 +106,7 @@ do{
             case 1:
                 printf(
                     "Taiga 'Pork Cutlet' yemeden duramiyor! \n"
-                    "Her 5 eylemde bir 'Pork Cutlet' yemez ise 6 eylemin ardindan\nyemedigi her bir eylem icin sevgi 1 azalir ve sinirlilik 1 artar.\n"
+                    "Her 6 eylemde bir 'Pork Cutlet' yemez ise 6 eylemin ardindan\nyemedigi her bir eylem icin sevgi 1 azalir ve sinirlilik 1 artar.\n"
                     "\n\nonceki menuye donmek icin 'enter'a bas >> "
                 );
                 getc(stdin);
@@ -168,7 +168,7 @@ void oyunBaslat(){
             ">>>>> "
             );
         girdi = getchar();
-        girdi -= '0'; // int alinca bug oluyordu char aldim asciiden sayiya cevirdim
+        girdi -= '0'; // int'i scanf ile alinca bug oluyordu bu yuzden getchar ile aldim ve asciiden sayiya cevirdim
         system("cls");
         switch (girdi)
         {
@@ -210,9 +210,9 @@ void oyunBaslat(){
                                 "|                                              |\n" 
                                 "| Pork Cutlet +3 Tokluk +2 Sevgi -2 Sinirlilik |\n" 
                                 "|                                              |\n" 
-                                "| Elma +1 Tokluk +2 Bagisiklik                 |\n" 
+                                "| Elma +1 Tokluk +2 Bagisiklik +1 Saglik       |\n" 
                                 "|                                              |\n" 
-                                "| Portakal +1 tokluk +3 Bagisiklik             |\n" 
+                                "| Portakal +1 tokluk +3 Bagisiklik +1 Saglik   |\n" 
                                 "|                                              |\n" 
                                 "|----------------------------------------------|\n"
                                 "\nYemek istediginiz yiyecegi 'adet isim' olarak yaziniz\n\ngeri donmek icin * tusuna basin\n\n"
@@ -271,6 +271,7 @@ void oyunBaslat(){
                                 animasyonlu_yazi("Elma Yeniyor");
                                 toklukFunction(karakter_durum_data,1,text_adet);
                                 BagisiklikFunction(karakter_durum_data,2,text_adet);
+                                SaglikFunction(karakter_durum_data,1,text_adet);
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,saglik,bagisiklik);
                                 rpg_sayac++;
                                 pork_cutlet_sayac++;
@@ -278,6 +279,7 @@ void oyunBaslat(){
                             }
                             else if(!strcmp(text_isim,"portakal")){
                                 animasyonlu_yazi("Portakal Yeniyor");
+                                SaglikFunction(karakter_durum_data,1,text_adet);
                                 toklukFunction(karakter_durum_data,1,text_adet);
                                 BagisiklikFunction(karakter_durum_data,3,text_adet);
                                 karakter_durumlarindan_bir_eksilt(karakter_durum_data,3,tokluk,saglik,bagisiklik);
@@ -758,9 +760,9 @@ void duruma_gore_yazi_yazdir(int* karakter_durum_data){
         system("cls");
         printf(
         "\n\tTaiga ansizin sana sariliyor ve sende dayanamayip sariliyorsun\n"
-        "\t\t+1 sevgi"
+        "\t\t+2 sevgi"
         );
-        SevgiFunction(karakter_durum_data,1,1);
+        SevgiFunction(karakter_durum_data,2,1);
     }
     else if(karakter_durum_data[su_durumu] < 4){
         printf("Taiga susuzluktan kivraniyor!");
