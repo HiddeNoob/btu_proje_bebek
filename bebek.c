@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <windows.h>
 #include <stdarg.h>
 #include <time.h>
 
@@ -46,9 +45,12 @@ void animasyonlu_yazi(char* ekran_yazisi);
 void karakter_olum_ekrani(int* karakter_durum_data);
 void dolan_bar_animasyonu(int gecen_ms,char* text);
 void karakter_ozellikleri_kontrol(int *karakter_durum_data,int rpg_sayac, int pork_cutlet_sayac);
+void printASCIIArt();
 
 
 int main(){
+printASCIIArt();
+
 int secim = -1;    
 do{
     do
@@ -130,7 +132,7 @@ do{
                 break;
             default:
                 printf("<<<< Yanlis Girdi Tekrar Deneyin >>>>\n\n");
-                Sleep(1000);
+                
             }
             system("cls");
             if(secim == 4)
@@ -139,7 +141,7 @@ do{
         break;
     case 4:
         printf("\n\n\tGorusmek Uzere!\n\n\n");
-        Sleep(1000);
+        
         exit(1);
     }
 }while(1);
@@ -289,7 +291,7 @@ void oyunBaslat(){
                             }
                             else{
                                 printf("Yanlis Girdi Tekrar Deneyin\n");
-                                Sleep(1000);
+                            
                             }
                         }while (1);
                         break;
@@ -367,7 +369,7 @@ void oyunBaslat(){
                         }
                         else{
                             printf("Yanlis Girdi Tekrar Deneyin");
-                            Sleep(1000);
+                            
                         }
                         
                         } while (1);
@@ -424,7 +426,7 @@ void oyunBaslat(){
                     default:
                         system("cls");
                         printf("Bilinmeyen Girdi Tekrar Deneyin");
-                        Sleep(1500);
+                       
                 }
                 if(girdi2 == 4) break;
             } while (1);
@@ -631,7 +633,7 @@ void karakter_durum_yazdir(int durum_id, int* karakter_durum_data,int rpg_sayac,
         "\t\tTaiga Altina Yapti!"
         "\n\t -4 hijyen +2 sinirlilik -2 sevgi\n"
         );
-        Sleep(5000);
+        
         system("cls");
         karakter_durum_data[tuvalet] = 0;
         HijyenFunction(karakter_durum_data,-4,1);
@@ -745,6 +747,21 @@ void karakter_durumlarindan_bir_eksilt(int* karakter_durum_data,int n,...){ // n
         }
         karakter_durum_data[artirilacaklar[i]]++;
     }
+}
+void printASCIIArt() {
+    FILE *file = fopen("ascii-art.txt", "r");
+
+    if (file == NULL) {
+        perror("Dosya acma hatasi");
+        return;
+    }
+
+    char ch;
+    while ((ch = fgetc(file)) != EOF) {
+        putchar(ch);
+    }
+
+    fclose(file);
 }
 int karakter_yasiyor_mu(int* karakter_durum_data){ // karakter yasiyorsa 1 yasamiyorsa 0 dondur
     if(karakter_durum_data[tokluk] <= 0 || karakter_durum_data[uyku] > 10 || karakter_durum_data[saglik] <= 0 || karakter_durum_data[tokluk] > 10 || karakter_durum_data[sinirlilik] >= 10 || karakter_durum_data[su_durumu] < 0) // 0 tokluk // 1 uyku // 3 saglik
@@ -864,7 +881,7 @@ void animasyonlu_yazi(char* ekran_yazisi){ // 500'er ms bekleyerek nokta bastiri
     for (int i = 0; i < 3; i++)
     {
         printf(".");
-        Sleep(500);
+        
     }
 }
 void dolan_bar_animasyonu(int gecen_ms,char* text){ // girilen ms kadar bekleyerek 1 kare bastirir ve bir bar doldururma animasyonu olusur
@@ -883,7 +900,7 @@ void dolan_bar_animasyonu(int gecen_ms,char* text){ // girilen ms kadar bekleyer
         "\n\t|                                |"
         "\n\t|--------------------------------|\n"
         );
-        Sleep(gecen_ms);
+        
         system("cls");
     }
 }
@@ -927,7 +944,7 @@ void karakter_olum_ekrani(int* karakter_durum_data){ // karakterin olme sebebine
         "\t\tTaiga sinirlenip tahta kiliciyla seni doverek evden kovdu\n"
         );
     }
-    Sleep(3000);
+   
     
     dolan_bar_animasyonu(150,"ANA MENUYE DONULUYOR");
     main();
